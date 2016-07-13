@@ -71,15 +71,13 @@
             var self = this;                                
             if(!self.startBool){//保证在一次touchstart未结束时，不能开启第二次start，也就是解决两个手指以上会乱跳的问题
                 scroll_float.bind("touchstart",function(e){
-                    self.y = 0;
+                    self.y = 0;//手指划过的距离清空
                     self.startBool = true;
-                    if($(e.target).hasClass(s_float)||$(e.target).parents('.'+s_float).length > 0) {
-                        self.scrollTop = scroll_float[0].scrollTop
-                        self.disY =e.changedTouches[0].pageY;
-                        
-                        self.touchmove(s_float,scroll_float);
-                        self.touchend(s_float,scroll_float);
-                    }
+                    self.scrollTop = scroll_float[0].scrollTop
+                    self.disY =e.changedTouches[0].pageY;
+                    
+                    self.touchmove(s_float,scroll_float);
+                    self.touchend(s_float,scroll_float);
                        
                 });
             }
@@ -87,16 +85,16 @@
         touchmove:function(s_float,scroll_float){
             var  self = this;
             scroll_float.bind("touchmove",function(e){
-                // e.preventDefault();
-                // e.stopPropagation(); 
+                e.preventDefault();
+                e.stopPropagation(); 
                 self.y += e.changedTouches[0].pageY - self.disY;    
                 if(scroll_float.height()+scroll_float.get(0).scrollTop>=scroll_float.get(0).scrollHeight&&self.y<0) {
-            
+                    //滑到底部
                     self.y = 0;
                     return;
                     
                 }else if(scroll_float.get(0).scrollTop === 0&&self.y>0){
-             
+                    //滑到顶部
                     self.y = 0;
                     return ;
                 }else{
