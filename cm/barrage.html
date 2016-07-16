@@ -30,7 +30,7 @@
 	.layer_barrage .reward{ position:absolute; right:50px; bottom:58px;} 
 	.layer_barrage .reward img{ width:40px; height:auto;}
 	</style>
-    <title>直播间——手机新浪网</title>
+    <title>弹幕Demo</title>
 </head>
 <body>
 	<div class="bs-example">
@@ -51,7 +51,7 @@
 		    <input type="text" class="form-control j_liWidth" id="exampleInputPassword1" >
 	  	</div>
 	  	<button type="submit" class="btn btn-default j_play_barrage">播放弹幕</button>
-	  	<span>弹幕将按设置播放，建议一轮播放后再提交</span>
+	  	<span>弹幕将按设置播放</span>
 	</div>
 	<div class="bs-example">
 	  	<div class="form-group">
@@ -84,7 +84,7 @@
 				aqueue = bqueue;
 				bqueue = [];
 			}
-			console.log(aqueue);
+			Barrage.danMuPause();
 			Barrage.danMuInit(aqueue);
 		})
 		$('.j_insert_barrage').on('click',function(){
@@ -188,9 +188,6 @@
 	    danMuInsert:function(queue,data){
 	        var self = this;
 	        var img =  'http://tva1.sinaimg.cn/default/images/default_avatar_male_50.gif';
-	        // if(typeof(userInfo)!='undefined'){
-	        //     img = userInfo.userface;
-	        // }
 	        setTimeout(function(){
 	           queue.unshift({'img':img,'content':data.content,'type':'0',source_id:''}); 
 	           if(queue.data == ''){
@@ -203,13 +200,13 @@
 	        var clearLi = setInterval(function(){
 	            for(var i = 0;i<$('.j_barrage').find('ul').children().length;i++){
 	                if($('.j_barrage').find('ul').children().eq(i).offset().left<-90){
-	                	console.log('remove')
 	                    $('.j_barrage').find('ul').children().eq(i).remove();
 	                }
 	            }
 	        },1000)
 	    },
 	    danMuPause:function(){
+	    	var self = this;
 	    	clearInterval(self.timeCacluate);
 	    }
 	};
