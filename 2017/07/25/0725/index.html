@@ -1,0 +1,754 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next muse use-motion" lang="">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.1" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="Hexo, NexT" />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.1" />
+
+
+
+
+
+
+<meta name="description" content="####名词解释  Node.js  是一个基于Chrome JavaScript运行时建立的平台， 用于方便地搭建响应速度快、易于扩展的网络应用，Node.js 使用事件驱动， 非阻塞I/O 模型而得以轻量和高效，非常适合在分布式设备上运行的数据密集型的实时应用。  NPM  一个NodeJS包管理和分发工具，它可以很快的找到特定服务要使用的包，进行下载、安装以及管理已经安装的包  Expres">
+<meta property="og:type" content="article">
+<meta property="og:title" content="nodejs基础实战">
+<meta property="og:url" content="http://yoursite.com/2017/07/25/0725/index.html">
+<meta property="og:site_name" content="Hexo">
+<meta property="og:description" content="####名词解释  Node.js  是一个基于Chrome JavaScript运行时建立的平台， 用于方便地搭建响应速度快、易于扩展的网络应用，Node.js 使用事件驱动， 非阻塞I/O 模型而得以轻量和高效，非常适合在分布式设备上运行的数据密集型的实时应用。  NPM  一个NodeJS包管理和分发工具，它可以很快的找到特定服务要使用的包，进行下载、安装以及管理已经安装的包  Expres">
+<meta property="og:image" content="http://n.sinaimg.cn/mobileh5/01345b8f/20170214/96ea1c33gy1fcl7bdc7pxj20f807k745.jpg">
+<meta property="og:updated_time" content="2017-07-25T14:49:55.944Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="nodejs基础实战">
+<meta name="twitter:description" content="####名词解释  Node.js  是一个基于Chrome JavaScript运行时建立的平台， 用于方便地搭建响应速度快、易于扩展的网络应用，Node.js 使用事件驱动， 非阻塞I/O 模型而得以轻量和高效，非常适合在分布式设备上运行的数据密集型的实时应用。  NPM  一个NodeJS包管理和分发工具，它可以很快的找到特定服务要使用的包，进行下载、安装以及管理已经安装的包  Expres">
+<meta name="twitter:image" content="http://n.sinaimg.cn/mobileh5/01345b8f/20170214/96ea1c33gy1fcl7bdc7pxj20f807k745.jpg">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Muse',
+    sidebar: {"position":"left","display":"post","offset":12,"offset_float":0,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: 'Author'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2017/07/25/0725/"/>
+
+
+
+
+
+  <title>nodejs基础实战 | Hexo</title>
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Hexo</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            Startseite
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            Kategorien
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            Über
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            Archiv
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            Tags
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/07/25/0725/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="John Doe">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Hexo">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">nodejs基础实战</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Veröffentlicht am</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2017-07-25T22:22:06+08:00">
+                2017-07-25
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">in</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/programming/" itemprop="url" rel="index">
+                    <span itemprop="name">编程</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>####名词解释</p>
+<blockquote>
+<p><strong>Node.js</strong></p>
+</blockquote>
+<p>是一个基于Chrome JavaScript运行时建立的平台， 用于方便地搭建响应速度快、易于扩展的网络应用，Node.js 使用事件驱动， 非阻塞I/O 模型而得以轻量和高效，非常适合在分布式设备上运行的数据密集型的实时应用。</p>
+<blockquote>
+<p><strong>NPM</strong></p>
+</blockquote>
+<p>一个NodeJS包管理和分发工具，它可以很快的找到特定服务要使用的包，进行下载、安装以及管理已经安装的包</p>
+<blockquote>
+<p><strong>Express</strong></p>
+</blockquote>
+<p>Express 是一个基于 Node.js 平台的极简、灵活的 web 应用开发框架</p>
+<hr>
+<p>####创建服务实例<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line">var http = require(&apos;http&apos;);</div><div class="line">var port = 3000;</div><div class="line">var server = http.createServer(function(req,res) &#123;</div><div class="line">  res.statusCode = 200;</div><div class="line">  res.setHeader(&apos;Content-Type&apos;, &apos;text/plain&apos;);</div><div class="line">  res.end(&apos;Hello World\n&apos;);</div><div class="line">&#125;)</div><div class="line">server.listen(port,function() &#123;</div><div class="line">  console.log(&apos;Server running&apos;);</div><div class="line">&#125;);</div></pre></td></tr></table></figure></p>
+<hr>
+<p>####NodeJS特点</p>
+<ul>
+<li><p>#####事件驱动<br>事件驱动模型三大要素：<br><strong>事件源</strong>：能够接收外部事件的源体。<br><strong>侦听器</strong>：能够接收事件源通知的对象。<br><strong>事件处理程序</strong>：用于处理事件的对象。</p>
+</li>
+<li><p>#####非阻塞I/O<br>阻塞调用是指调用结果返回之前，当前线程会被挂起。调用线程只有在得到结果之后才会返回。<br>非阻塞调用指在不能立刻得到结果之前，该调用不会阻塞当前线程。</p>
+</li>
+<li><p>#####事件轮询机制<br>一个事件轮询拥有下面三个组件<br><strong>事件队列</strong>：这是一个FIFO模型的队列，一方推入事件，另一方推出事件<br><strong>队列的读取轮询线程组件</strong>，也就是主角Event Loop，<br><strong>单独的线程池</strong>： 用来执行长任务（也就是threadpool，node底层，用C++写的，不会阻塞）<br><img src="http://n.sinaimg.cn/mobileh5/01345b8f/20170214/96ea1c33gy1fcl7bdc7pxj20f807k745.jpg" alt=""><br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;在NodeJS中，只有一个主线程（也就是前面说的单线程）来不断读取轮询（书中称为调用I/O观察者）队列中是否有事件。而对于读取文件，HTTP请求等比较容易堵塞的事件，就在这个单线程中执行肯定会造成堵塞，所以Event Loop会把这类型的事件交给底层的线程池执行，并给予线程池一个回调函数，当线程池操作完成这堵塞任务后，便把结果和回调函数一起再放入轮询队列中。当单线程从队列中不断读取事件，读取到这些堵塞的操作结果后，会将这些操作结果作为回调函数的输入参数，然后激活运行回调函数。<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Node.js的这个单线程不只是负责读取队列事件，还会执行运行回调函数<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<strong>优点</strong>：适合大量I/O计算<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<strong>缺点</strong>：不适合密集的cpu计算</p>
+</li>
+</ul>
+<hr>
+<p>####NodeJS部分模块介绍</p>
+<ul>
+<li><p><strong>http</strong>    http是Node.JS从HTTP服务器获取相应内容的主要模块</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">http.createServer()//返回一个新的Web服务器对象</div><div class="line">http.listen()//在指定的主机名和端口上建立连接</div></pre></td></tr></table></figure>
+</li>
+<li><p><strong>fs</strong> 处理文件系统的相关操作，例如读写文件，设置文件权限</p>
+</li>
+<li><p><strong>path</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">path.extname(&apos;index.html&apos;)</div><div class="line">// Returns: &apos;.html&apos;</div><div class="line">path.dirname(&apos;/foo/bar/baz/asdf/quux&apos;)</div><div class="line">// Returns: &apos;/foo/bar/baz/asdf&apos;</div></pre></td></tr></table></figure>
+</li>
+<li><p><strong>cluster模块</strong><br>产生更多的NodeJS进程来处理系统的加载，使用相同的源代码，监听相同的端口</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">var cluster = require(&apos;cluster&apos;);</div><div class="line">var numCpus = require(&apos;os&apos;).cpus().length;</div><div class="line">cluster.isMaster//判断是否为主进程</div><div class="line">cluster.isWorker//判断是否为子进程</div><div class="line">cluster.worker.process.pid//获取进程pid</div></pre></td></tr></table></figure>
+</li>
+</ul>
+<hr>
+<p>####NodeJS代理本地文件实例<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div></pre></td><td class="code"><pre><div class="line">var url  = require(&quot;url&quot;),</div><div class="line">     fs=require(&quot;fs&quot;),</div><div class="line">     http=require(&quot;http&quot;),</div><div class="line">     path = require(&quot;path&quot;);</div><div class="line">http.createServer(function (req, res) &#123;</div><div class="line">    var pathname=__dirname+url.parse(req.url).pathname;//__dirname使用该全局变量的绝对路径</div><div class="line">    fs.exists(pathname,function(exists)&#123;</div><div class="line">        if(exists)&#123;</div><div class="line">            switch(path.extname(pathname))&#123;</div><div class="line">                case &quot;.html&quot;:</div><div class="line">                    res.writeHead(200, &#123;&quot;Content-Type&quot;: &quot;text/html&quot;&#125;);</div><div class="line">                    break;</div><div class="line">                case &quot;.js&quot;:</div><div class="line">                    res.writeHead(200, &#123;&quot;Content-Type&quot;: &quot;text/javascript&quot;&#125;);</div><div class="line">                    break;</div><div class="line">                default:</div><div class="line">                    res.writeHead(200, &#123;&quot;Content-Type&quot;: &quot;application/octet-stream&quot;&#125;);</div><div class="line">            &#125;</div><div class="line"></div><div class="line">            fs.readFile(pathname,function (err,data)&#123;</div><div class="line">                res.end(data);</div><div class="line">            &#125;);</div><div class="line">        &#125; else &#123;</div><div class="line">            res.writeHead(404, &#123;&quot;Content-Type&quot;: &quot;text/html&quot;&#125;);</div><div class="line">            res.end(&quot;&lt;h1&gt;404 Not Found&lt;/h1&gt;&quot;);</div><div class="line">        &#125;</div><div class="line">    &#125;);</div><div class="line">&#125;).listen(8080, &quot;127.0.0.1&quot;);</div></pre></td></tr></table></figure></p>
+<hr>
+<p>####创建Web服务<br><strong>安装Express</strong> <code>npm install express -g</code></p>
+<ul>
+<li>执行Express</li>
+<li>目录结构<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line">├─bin</div><div class="line">├─public</div><div class="line">│  ├─images</div><div class="line">│  ├─javascripts</div><div class="line">│  └─stylesheets</div><div class="line">├─routes</div><div class="line">├─views</div><div class="line">├─app.js</div><div class="line">└─package.json</div></pre></td></tr></table></figure>
+</li>
+</ul>
+<hr>
+<p>####Express API</p>
+<blockquote>
+<p>Express 是一个自身功能极简，完全是由路由和中间件构成一个的 web 开发框架：从本质上来说，一个 Express 应用就是在调用各种中间件。</p>
+<p>#####中间件<br>中间件是一个函数，它可以访问请求对象, 响应对象, 和 web 应用中处于请求-响应循环流程中的中间件</p>
+<ul>
+<li>执行任何代码。</li>
+<li>修改请求和响应对象。</li>
+<li>终结请求-响应循环。</li>
+<li>调用堆栈中的下一个中间件。<br>#####路由<br>路由是指如何定义应用的端点（URIs）以及如何响应客户端的请求。</li>
+<li>HTTP请求方法</li>
+<li>请求路径</li>
+<li>回调函数</li>
+<li>相应函数<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">var express = require(&apos;express&apos;);</div><div class="line">var app = express();</div><div class="line">app.get(&apos;/&apos;, function(req, res) &#123;</div><div class="line">  res.send(&apos;hello world&apos;);</div><div class="line">&#125;);</div></pre></td></tr></table></figure>
+</li>
+</ul>
+</blockquote>
+<ul>
+<li>Router()创建路由模块化</li>
+</ul>
+<hr>
+<p>####引用文件<br><a href="https://nodejs.org/dist/latest-v6.x/docs/api/" target="_blank" rel="external">NodeJS官方文档</a><br><a href="http://www.expressjs.com.cn/4x/api.html" target="_blank" rel="external">Express4.x中文文档</a><br><a href="">Node.JS项目实践构建可扩展的Web应用书籍</a><br><a href="">了不起的NodeJS书籍</a><br><a href="http://www.cnblogs.com/gaoxianlyx/p/6385557.html" target="_blank" rel="external">对NodeJS事件轮询的理解</a><br><a href="http://baike.sogou.com/v8448313.htm?fromTitle=%E4%BA%8B%E4%BB%B6%E9%A9%B1%E5%8A%A8" target="_blank" rel="external">事件驱动</a></p>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2017/07/25/0724/" rel="next" title="使用connect-mongo为NodeJS项目添加会话session">
+                <i class="fa fa-chevron-left"></i> 使用connect-mongo为NodeJS项目添加会话session
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+
+      <section class="site-overview sidebar-panel sidebar-panel-active">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/images/avatar.gif"
+               alt="John Doe" />
+          <p class="site-author-name" itemprop="name">John Doe</p>
+           
+              <p class="site-description motion-element" itemprop="description"></p>
+          
+        </div>
+        <nav class="site-state motion-element">
+
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives/">
+                <span class="site-state-item-count">15</span>
+                <span class="site-state-item-name">Artikel</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-categories">
+              
+                <span class="site-state-item-count">1</span>
+                <span class="site-state-item-name">Kategorien</span>
+              
+            </div>
+          
+
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+        </div>
+
+        
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2017</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">John Doe</span>
+</div>
+
+
+<div class="powered-by">
+  Erstellt mit  <a class="theme-link" href="https://hexo.io">Hexo</a>
+</div>
+
+<div class="theme-info">
+  Theme -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Muse
+  </a>
+</div>
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.1"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.1"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.1"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.1"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.1"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

@@ -1,0 +1,721 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next muse use-motion" lang="">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.1" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="Hexo, NexT" />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.1" />
+
+
+
+
+
+
+<meta name="description" content="#####引用文档： 基于Node.js项目实践，构建可扩展的web应用 Mongoose 使用之 Population Mongoose API v4.4.13 . #####MongoDB、Mongoose  MongoDB是NoSQL数据库，易扩展，比传统数据库更适合处理大数据。Mongoose是基于Node.js、MongoDB的高级ORM类库。链接数据库简单，不必每次开启关闭数据库。对于">
+<meta property="og:type" content="article">
+<meta property="og:title" content="nodejs基础实战">
+<meta property="og:url" content="http://yoursite.com/2017/07/25/0712/index.html">
+<meta property="og:site_name" content="Hexo">
+<meta property="og:description" content="#####引用文档： 基于Node.js项目实践，构建可扩展的web应用 Mongoose 使用之 Population Mongoose API v4.4.13 . #####MongoDB、Mongoose  MongoDB是NoSQL数据库，易扩展，比传统数据库更适合处理大数据。Mongoose是基于Node.js、MongoDB的高级ORM类库。链接数据库简单，不必每次开启关闭数据库。对于">
+<meta property="og:image" content="http://n.sinaimg.cn/mobileh5/dc9d8119/20160424/QQTuPian20160424121738.png">
+<meta property="og:image" content="http://n.sinaimg.cn/mobileh5/dc9d8119/20160424/QQTuPian20160424121743.png">
+<meta property="og:updated_time" content="2017-07-25T14:49:09.060Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="nodejs基础实战">
+<meta name="twitter:description" content="#####引用文档： 基于Node.js项目实践，构建可扩展的web应用 Mongoose 使用之 Population Mongoose API v4.4.13 . #####MongoDB、Mongoose  MongoDB是NoSQL数据库，易扩展，比传统数据库更适合处理大数据。Mongoose是基于Node.js、MongoDB的高级ORM类库。链接数据库简单，不必每次开启关闭数据库。对于">
+<meta name="twitter:image" content="http://n.sinaimg.cn/mobileh5/dc9d8119/20160424/QQTuPian20160424121738.png">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Muse',
+    sidebar: {"position":"left","display":"post","offset":12,"offset_float":0,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: 'Author'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2017/07/25/0712/"/>
+
+
+
+
+
+  <title>nodejs基础实战 | Hexo</title>
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Hexo</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            Startseite
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            Kategorien
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            Über
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            Archiv
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            Tags
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/07/25/0712/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="John Doe">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Hexo">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">nodejs基础实战</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Veröffentlicht am</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2017-07-25T22:22:06+08:00">
+                2017-07-25
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">in</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/programming/" itemprop="url" rel="index">
+                    <span itemprop="name">编程</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>#####引用文档：</p>
+<p><a href="http://product.dangdang.com/23698386.html" target="_blank" rel="external">基于Node.js项目实践，构建可扩展的web应用</a></p>
+<p><a href="http://my.oschina.net/calvinchen/blog/137932" target="_blank" rel="external">Mongoose 使用之 Population</a></p>
+<p><a href="http://mongoosejs.com/docs/api.html" target="_blank" rel="external">Mongoose API v4.4.13 </a>.</p>
+<p>#####MongoDB、Mongoose<br>  MongoDB是NoSQL数据库，易扩展，比传统数据库更适合处理大数据。Mongoose是基于Node.js、MongoDB的高级ORM类库。链接数据库简单，不必每次开启关闭数据库。对于NoSql数据库来说，数据库中是不存储关系数据的，并没有主键、外键约束之分，但是我们可以在应用层进行存储，Mongoose提供的这一特性，名为population，允许我们使用不同集合来填充文档特定部分，个人理解感觉就像是通过外键可以获得外键所在表中的信息这样的查询效果。</p>
+<p>在介绍population之前，先简单介绍一下Mongoose的一些名词：</p>
+<blockquote>
+<p><em>Schema：</em>一种以文件形式存储的数据库模型骨架，不具备数据库的操作能力。</p>
+<p><em>Model：</em>由Schema发布生成的模型，具有抽象性和行为的数据库操作对。</p>
+<p><em>Entity:</em>由Model创建的实体，操作会影响数据库。</p>
+</blockquote>
+<p>#####实例说明：<br>首先引入mongoose模块，连接数据库<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">var mongoose = require(&apos;mongoose&apos;),</div><div class="line">    Schema = mongoose.Schema;</div><div class="line">mongoose.connect(&apos;mongodb://localhost/test&apos;);</div></pre></td></tr></table></figure></p>
+<p>链接数据库之后要定义原型，原型是一个json格式的类，Mongoose的原型支持下面这些数据类型：</p>
+<ul>
+<li>String</li>
+<li>Number</li>
+<li>Boolean</li>
+<li>Buffer：node.js二进制类型，多用于图像、PDF、档案等；</li>
+<li>Date：ISO标准格式化日期类型；</li>
+<li>Array</li>
+<li>Schema.Types.ObjectId：MongoDB中的一个典型24个字符，12字节的十六进制数字字符串；</li>
+<li>Schema.Type.Mixed：任何类型数据。</li>
+</ul>
+<p><strong>建立的实例场景为一个聊天室中可以有多名用户。</strong></p>
+<p><strong>建立用户原型：</strong><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">var UserSchema = Schema(&#123;</div><div class="line">  _id:Number,</div><div class="line">  name : String,</div><div class="line">  sex:String</div><div class="line">&#125;)</div><div class="line">var User = mongoose.model(&apos;users&apos;, UserSchema);//将原型和方法编译为一个模块,users也将是存入数据库中的集合的名称。</div></pre></td></tr></table></figure></p>
+<p><strong>建立聊天室原型：</strong><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">var RoomSchema = Schema(&#123;</div><div class="line">  roomNumber:String,</div><div class="line">  roomMember:[&#123;</div><div class="line">    type:Number, ref: &apos;users&apos;</div><div class="line">  &#125;],</div><div class="line">&#125;)</div><div class="line">var Room = mongoose.model(&apos;rooms&apos;,RoomSchema);//将原型和方法编译为一个模块</div></pre></td></tr></table></figure></p>
+<p><strong>创建实例：</strong><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">var lily = new User(&#123;&apos;_id&apos;:1000,&apos;name&apos;: &apos;lily&apos;,&apos;sex&apos;:&apos;F&apos;&#125;);</div><div class="line">var lucy = new User(&#123;&apos;_id&apos;:1001,&apos;name&apos;:&apos;lucy&apos;,&apos;sex&apos;:&apos;F&apos;&#125;);</div><div class="line">var room = new Room(&#123;</div><div class="line">  &apos;roomNumber&apos;:&apos;1&apos;,</div><div class="line">  &apos;roomMember&apos;:[lily._id,lucy._id]//此处所调用的必须为_id字段，如果创建原型时未创建id字段，则数据库会自动生成Schema.Types.ObjectId类型的_id</div><div class="line">&#125;);</div></pre></td></tr></table></figure></p>
+<p><strong>将数据存入数据库：</strong><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">function callback(err,doc)&#123;</div><div class="line">  if(err) throw err;</div><div class="line">  console.log(doc);//返回的是存入数据库中的记录</div><div class="line">&#125;;</div><div class="line">lily.save(callback);</div><div class="line">lucy.save(callback);</div><div class="line">room.save(callback);</div></pre></td></tr></table></figure></p>
+<p>数据库中查询记录<br><img src="http://n.sinaimg.cn/mobileh5/dc9d8119/20160424/QQTuPian20160424121738.png" alt="数据库中的查询记录"><br><strong>population的使用</strong><br>在查找数据的而过程中使用population可以输出相应的实例记录<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">Room.findOne(&#123;roomNumber:&apos;1&apos;&#125;)</div><div class="line">.populate(&apos;roomMember&apos;)</div><div class="line">.exec(callback);</div></pre></td></tr></table></figure></p>
+<p>通过population查询之后，在控制台中打印的console.log(doc)如下图所示：<br><img src="http://n.sinaimg.cn/mobileh5/dc9d8119/20160424/QQTuPian20160424121743.png" alt=""><br>通过图片我们可以看到在room原型中所ref的user原型中符合的信息已经全部都输出了，这样就不用多集合查询获得信息了，虽然各集合之间都没有关系，但是我们通过使用population在应用层存储它们，太感人了！</p>
+<p><strong>小扩展</strong></p>
+<p>1、当我不需要获得一条记录的全部信息时可以在populate中对于输出的信息做限制<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">Room.findOne(&#123;roomNumber: &apos;1&apos;&#125;)</div><div class="line">.populate(&apos;roomMember&apos;,&apos;name&apos;)</div><div class="line">.exec(callback);</div></pre></td></tr></table></figure></p>
+<p>在populate中添加User中的字段name，那么在输出的过程中就会只显示name和_id字段。</p>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2017/07/25/0713/" rel="next" title="通过video的timeupdate检测视频无法播放实例说明">
+                <i class="fa fa-chevron-left"></i> 通过video的timeupdate检测视频无法播放实例说明
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2017/07/25/0722/" rel="prev" title="HTML5本地存储IndexedDB兼容性简单探索">
+                HTML5本地存储IndexedDB兼容性简单探索 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+
+      <section class="site-overview sidebar-panel sidebar-panel-active">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/images/avatar.gif"
+               alt="John Doe" />
+          <p class="site-author-name" itemprop="name">John Doe</p>
+           
+              <p class="site-description motion-element" itemprop="description"></p>
+          
+        </div>
+        <nav class="site-state motion-element">
+
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives/">
+                <span class="site-state-item-count">15</span>
+                <span class="site-state-item-name">Artikel</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-categories">
+              
+                <span class="site-state-item-count">1</span>
+                <span class="site-state-item-name">Kategorien</span>
+              
+            </div>
+          
+
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+        </div>
+
+        
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2017</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">John Doe</span>
+</div>
+
+
+<div class="powered-by">
+  Erstellt mit  <a class="theme-link" href="https://hexo.io">Hexo</a>
+</div>
+
+<div class="theme-info">
+  Theme -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Muse
+  </a>
+</div>
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.1"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.1"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.1"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.1"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.1"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

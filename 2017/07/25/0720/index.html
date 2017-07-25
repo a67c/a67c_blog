@@ -1,0 +1,721 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next muse use-motion" lang="">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.1" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="Hexo, NexT" />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.1" />
+
+
+
+
+
+
+<meta name="description" content="####引用文档：HTML5本地存储——IndexedDB（一：基本使用） HTML5本地存储——IndexedDB（二：索引） IndexedDB API JavaScript高级程序设计（第三版） ####Demo图示： ####IndexedDB简介：  IndexedDB是在浏览器中保存结构化数据的一种数据库，IndexedDB的思想是创建一套API，方便保存和读取JavaScript对象">
+<meta property="og:type" content="article">
+<meta property="og:title" content="HTML5本地存储IndexedDB基础介绍（-）-数据库的简单增删改查">
+<meta property="og:url" content="http://yoursite.com/2017/07/25/0720/index.html">
+<meta property="og:site_name" content="Hexo">
+<meta property="og:description" content="####引用文档：HTML5本地存储——IndexedDB（一：基本使用） HTML5本地存储——IndexedDB（二：索引） IndexedDB API JavaScript高级程序设计（第三版） ####Demo图示： ####IndexedDB简介：  IndexedDB是在浏览器中保存结构化数据的一种数据库，IndexedDB的思想是创建一套API，方便保存和读取JavaScript对象">
+<meta property="og:image" content="http://n.sinaimg.cn/mobileh5/01345b8f/20160923/5.png">
+<meta property="og:image" content="http://n.sinaimg.cn/mobileh5/01345b8f/20160922/1.png">
+<meta property="og:image" content="http://n.sinaimg.cn/mobileh5/01345b8f/20160922/2.png">
+<meta property="og:image" content="http://n.sinaimg.cn/mobileh5/01345b8f/20160922/3.png">
+<meta property="og:updated_time" content="2017-07-25T14:49:40.828Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="HTML5本地存储IndexedDB基础介绍（-）-数据库的简单增删改查">
+<meta name="twitter:description" content="####引用文档：HTML5本地存储——IndexedDB（一：基本使用） HTML5本地存储——IndexedDB（二：索引） IndexedDB API JavaScript高级程序设计（第三版） ####Demo图示： ####IndexedDB简介：  IndexedDB是在浏览器中保存结构化数据的一种数据库，IndexedDB的思想是创建一套API，方便保存和读取JavaScript对象">
+<meta name="twitter:image" content="http://n.sinaimg.cn/mobileh5/01345b8f/20160923/5.png">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Muse',
+    sidebar: {"position":"left","display":"post","offset":12,"offset_float":0,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: 'Author'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2017/07/25/0720/"/>
+
+
+
+
+
+  <title>HTML5本地存储IndexedDB基础介绍（-）-数据库的简单增删改查 | Hexo</title>
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Hexo</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            Startseite
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            Kategorien
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            Über
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            Archiv
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            Tags
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/07/25/0720/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="John Doe">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Hexo">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">HTML5本地存储IndexedDB基础介绍（-）-数据库的简单增删改查</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Veröffentlicht am</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2017-07-25T22:22:06+08:00">
+                2017-07-25
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">in</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/programming/" itemprop="url" rel="index">
+                    <span itemprop="name">编程</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>####引用文档：<br><a href="http://www.cnblogs.com/dolphinX/p/3415761.html" target="_blank" rel="external">HTML5本地存储——IndexedDB（一：基本使用）</a></p>
+<p><a href="http://www.cnblogs.com/dolphinX/p/3416889.html" target="_blank" rel="external">HTML5本地存储——IndexedDB（二：索引）</a></p>
+<p><a href="https://developer.mozilla.org/en-US/docs/Web/API/IndexedDB_API" target="_blank" rel="external">IndexedDB API</a></p>
+<p>JavaScript高级程序设计（第三版）</p>
+<p>####Demo图示：<br><img src="http://n.sinaimg.cn/mobileh5/01345b8f/20160923/5.png" alt=""></p>
+<p>####IndexedDB简介：</p>
+<blockquote>
+<p>IndexedDB是在浏览器中保存结构化数据的一种数据库，IndexedDB的思想是创建一套API，方便保存和读取JavaScript对象，同时支持查询和搜索。IndexedDB的最大特色是使用对象保存数据。一个IndexedDB数据库，就是一组位于相同命名空间下的对象的集合。</p>
+<p>####IndexedDB打开数据库：</p>
+<ul>
+<li><strong>open</strong></li>
+</ul>
+</blockquote>
+<p>   IndexedDB是一个作为API宿主的全局对象,由于IndexedDB设计的操作为异步进行，所以大多数的操作为请求操作，打开数据库即向数据库发送<code>open</code>请求,如下代码所示，发送请求后，如果数据库存在，就打开该数据库，如果数据库不存在，就创建并打开该数据库，打开该数据库成功后会返回一个<code>IDBOpenDBRequest</code>对象，这个对象上可以添加一系列的处理程序，如代码中的<code>onerror</code>事件和<code>onsuccess</code>事件,在<code>onsuccess</code>中可以得到<code>IDBDatabase</code>对象。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line">var indexedDB = window.indexedDB || window.mozIndexedDB || window.webkitIndexedDB || window.msIndexedDB;</div><div class="line">var request,database;</div><div class="line">request = indexedDB.open(&apos;test&apos;);</div><div class="line">request.onerror = function(e)&#123;</div><div class="line">    console.log(e.target.errorCode);</div><div class="line">&#125;;</div><div class="line">request.onsuccess = function(e)&#123;</div><div class="line">    database = e.target.result;</div><div class="line">    console.log(&apos;创建或打开数据库成功&apos;) ;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>   以上代码在控制台中得到结果如下图所示：<br><img src="http://n.sinaimg.cn/mobileh5/01345b8f/20160922/1.png" alt=""></p>
+<ul>
+<li><p><strong>version</strong></p>
+<p>默认情况下，IndexedDB是没有版本号的，最好一开始为数据库指定一个版本号，我们可以在创建或者打开数据库时为其指定版本号，在上述代码中将open函数传入的参数更改为<code>request = indexedDB.open(&#39;test&#39;,1);</code>这样就为当前数据库设定了版本号，通过设置版本号可以知道想使用的数据库是否设置了合适的对象存储空间，在整个Web应用中，随着数据库的更新和修改，可能会产生很多个不同的版本号（ps：关于版本号的用途也没有摸索特别清楚，可以确定的是每次增加对象存储空间都是要修改版本号的。）<br>####IndexedDB对象存储空间:<br>在建立或者打开数据库后，我们一般的操作是建立表，向表中插入数据，在IndexedDB中，用对象存储空间<code>ObjectStore</code>来代替表的概念，存储空间中的对象就相当于表中插入的数据。在上一步打开数据库的<code>onsuccess</code>中我们可以获得到<code>IDBDatabase</code>对象，创建存储空间就是在通过该对象调用<code>createObjectStore</code>函数。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">var store = database.createObjectStore(&quot;students&quot;,&#123;keyPath:&quot;id&quot;&#125;);</div><div class="line">//var store = database.createObjectStore(&quot;students&quot;,&#123;autoIncrement:true&#125;);</div></pre></td></tr></table></figure>
+</li>
+</ul>
+<p>上述代码中<code>createObjectStore</code>第一个参数为存储对象空间的名字，第二个参数为存储空间的键，既数据库表中的主键，我们进行查找或者删除某个对象都要通过这个键来查找，如果不设置存储空间的键，可以如代码注释行一样，设置自增类型。<br>API文档中对于该参数说明如下：<br><img src="http://n.sinaimg.cn/mobileh5/01345b8f/20160922/2.png" alt=""><br>在浏览器中显示如下：<br><img src="http://n.sinaimg.cn/mobileh5/01345b8f/20160922/3.png" alt=""></p>
+<ul>
+<li><strong>错误说明</strong></li>
+</ul>
+<p>在创建存储对象空间可能报如下错误：<br><code>Failed to execute &#39;createObjectStore&#39; on &#39;IDBDatabase&#39;: The database is not running a version change transaction.</code>报该错误的原因是：第一次<code>open</code>的<code>success</code>事件处于<code>version_change</code>事务中  这个时候不能<code>createObjectStore</code>，<code>createObjectStore</code>操作要在<code>onupgradeneeded</code>的事件中执行。</p>
+<p>####为对象存储空间添加数据：<br>创建存储空间之后，可以用add()或者put()方法为其添加数据，这两个方法都接收所要保存的对象，区别之处在于，使用add()方法，遇到键值相同的对象会返回错误，而put()则不会报错，会重写原有对象。如下代码使用add()方法进行数据添加，代码中包括打开数据库及创建存储对象空间。可在控制台中直接运行。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div></pre></td><td class="code"><pre><div class="line">var indexedDB = window.indexedDB || window.mozIndexedDB || window.webkitIndexedDB || window.msIndexedDB;</div><div class="line">var request,database;</div><div class="line">var data=[&#123; </div><div class="line">    id:1007, </div><div class="line">    name:&quot;Byron&quot;, </div><div class="line">    age:24 </div><div class="line">&#125;,&#123; </div><div class="line">    id:1008, </div><div class="line">    name:&quot;Frank&quot;, </div><div class="line">    age:30 </div><div class="line">&#125;,&#123; </div><div class="line">    id:1009, </div><div class="line">    name:&quot;Aaron&quot;, </div><div class="line">    age:26 </div><div class="line">&#125;];</div><div class="line">request = indexedDB.open(&apos;test&apos;,1);</div><div class="line">request.onerror = function()&#123;</div><div class="line">    console.log(&apos;error&apos;);</div><div class="line">&#125;;</div><div class="line">request.onsuccess = function(e)&#123;</div><div class="line">    database = e.target.result;	</div><div class="line">    console.log(&apos;创建或打开数据库成功&apos;) ;</div><div class="line">&#125;;</div><div class="line">request.onupgradeneeded=function(e)&#123;</div><div class="line">	database = e.target.result;</div><div class="line">	</div><div class="line">    if(!database.objectStoreNames.contains(&quot;students&quot;))&#123;</div><div class="line">    	var store = database.createObjectStore(&quot;students&quot;,&#123;autoIncrement:true&#125;);</div><div class="line">		for(var i = 0 ; i &lt; data.length;i++)&#123;</div><div class="line">		    request = store.add(data[i]);</div><div class="line">		    request.onerror = function()&#123;</div><div class="line">			 console.error(&apos;数据库中已有该数据&apos;)</div><div class="line">		    &#125;;</div><div class="line">		    request.onsuccess = function()&#123;</div><div class="line">			 console.log(&apos;数据已存入数据库&apos;)</div><div class="line">		    &#125;;</div><div class="line">		&#125;</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>####事务<br>创建对象存储空间之后，数据库中的增删改查都是通过事务<code>transaction</code>来完成的，在数据库对象上调用<code>transaction()</code>方法可以创建事务。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">var transaction= database.transaction(&quot;students&quot;,&apos;readwrite&apos;);</div><div class="line">var store = transaction.objectStore(&quot;students&quot;)</div></pre></td></tr></table></figure></p>
+<p>如上代码保证只加载<code>students</code>存储空间的数据，然后通过事务访问该空间，对该空间中的数据进行操作，transaction()中传入的第二个参数为对该空间操作的方式，默认为<code>readonly</code>只读操作，代码中传入的是<code>readwrite</code>读写操作。其它可访问MDN API<a href="https://developer.mozilla.org/en-US/docs/Web/API/IDBTransaction" target="_blank" rel="external">IDBTransaction</a>;</p>
+<p>####完整代码<br>下述代码为demo中的代码，整合数据库的增删改查，包括添加查找删除数据，创建打开关闭数据库，由于异步操作，在调用<code>open</code>之后需要等返回<code>success</code>函数中执行其它操作，或者设立<code>setTimeout</code>定时器，执行结果如demo图示所示。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div><div class="line">65</div><div class="line">66</div><div class="line">67</div><div class="line">68</div><div class="line">69</div><div class="line">70</div><div class="line">71</div><div class="line">72</div><div class="line">73</div><div class="line">74</div><div class="line">75</div><div class="line">76</div><div class="line">77</div><div class="line">78</div><div class="line">79</div><div class="line">80</div><div class="line">81</div><div class="line">82</div><div class="line">83</div><div class="line">84</div><div class="line">85</div><div class="line">86</div><div class="line">87</div><div class="line">88</div><div class="line">89</div><div class="line">90</div><div class="line">91</div><div class="line">92</div><div class="line">93</div><div class="line">94</div><div class="line">95</div><div class="line">96</div><div class="line">97</div><div class="line">98</div><div class="line">99</div><div class="line">100</div><div class="line">101</div><div class="line">102</div><div class="line">103</div><div class="line">104</div><div class="line">105</div><div class="line">106</div><div class="line">107</div><div class="line">108</div><div class="line">109</div><div class="line">110</div><div class="line">111</div><div class="line">112</div><div class="line">113</div><div class="line">114</div><div class="line">115</div><div class="line">116</div><div class="line">117</div><div class="line">118</div><div class="line">119</div><div class="line">120</div><div class="line">121</div><div class="line">122</div><div class="line">123</div><div class="line">124</div><div class="line">125</div><div class="line">126</div><div class="line">127</div><div class="line">128</div><div class="line">129</div><div class="line">130</div><div class="line">131</div><div class="line">132</div><div class="line">133</div></pre></td><td class="code"><pre><div class="line">var myDB=&#123;</div><div class="line">        name:&apos;school&apos;,</div><div class="line">        version:1,</div><div class="line">        db:null,</div><div class="line">        ojstore:&#123;</div><div class="line">        	name:&apos;students&apos;,//存储空间表的名字</div><div class="line">        	keypath:&apos;id&apos;//主键</div><div class="line">        &#125;</div><div class="line">    &#125;;</div><div class="line"></div><div class="line">	var INDEXDB = &#123;</div><div class="line">		indexedDB:window.indexedDB||window.webkitindexedDB,</div><div class="line">		IDBKeyRange:window.IDBKeyRange || window.webkitIDBKeyRange,//键范围</div><div class="line">		openDB:function(dbname,dbversion,callback)&#123;</div><div class="line">			//建立或打开数据库，建立对象存储空间(ObjectStore)</div><div class="line">			var self = this;</div><div class="line">			var	version = dbversion || 1;</div><div class="line">			var request = self.indexedDB.open(dbname,version);</div><div class="line">			request.onerror = function(e)&#123;</div><div class="line">				console.log(e.currentTarget.error.message);</div><div class="line">			&#125;;</div><div class="line">			request.onsuccess = function(e)&#123;</div><div class="line">				myDB.db = e.target.result;</div><div class="line">				console.log(&apos;成功建立并打开数据库:&apos;+myDB.name+&apos; version&apos;+dbversion);</div><div class="line">			&#125;;</div><div class="line">			request.onupgradeneeded=function(e)&#123;</div><div class="line">				var db=e.target.result,transaction= e.target.transaction,store;</div><div class="line">				if(!db.objectStoreNames.contains(myDB.ojstore.name))&#123;</div><div class="line">					//没有该对象空间时创建该对象空间</div><div class="line">					store = db.createObjectStore(myDB.ojstore.name,&#123;keyPath:myDB.ojstore.keypath&#125;);</div><div class="line">					console.log(&apos;成功建立对象存储空间：&apos;+myDB.ojstore.name);</div><div class="line">				&#125;</div><div class="line">			&#125;</div><div class="line"></div><div class="line"></div><div class="line">		&#125;,</div><div class="line">		deletedb:function(dbname)&#123;</div><div class="line">			//删除数据库</div><div class="line">			var self = this;</div><div class="line">			self.indexedDB.deleteDatabase(dbname);</div><div class="line">			console.log(dbname+&apos;数据库已删除&apos;)</div><div class="line">		&#125;,</div><div class="line">		closeDB:function(db)&#123;</div><div class="line">			//关闭数据库</div><div class="line">			db.close();</div><div class="line">			console.log(&apos;数据库已关闭&apos;)</div><div class="line">		&#125;,</div><div class="line">		addData:function(db,storename,data)&#123;</div><div class="line">			//添加数据，重复添加会报错</div><div class="line">			var store = store = db.transaction(storename,&apos;readwrite&apos;).objectStore(storename),request;</div><div class="line">			for(var i = 0 ; i &lt; data.length;i++)&#123;</div><div class="line">	    		request = store.add(data[i]);</div><div class="line">	    		request.onerror = function()&#123;</div><div class="line">	    			console.error(&apos;add添加数据库中已有该数据&apos;)</div><div class="line">	    		&#125;;</div><div class="line">	    		request.onsuccess = function()&#123;</div><div class="line">	    			console.log(&apos;add添加数据已存入数据库&apos;)</div><div class="line">	    		&#125;;</div><div class="line">	    	&#125;</div><div class="line">	    	</div><div class="line">		&#125;,</div><div class="line">		putData:function(db,storename,data)&#123;</div><div class="line">			//添加数据，重复添加会更新原有数据</div><div class="line">			var store = store = db.transaction(storename,&apos;readwrite&apos;).objectStore(storename),request;</div><div class="line">			for(var i = 0 ; i &lt; data.length;i++)&#123;</div><div class="line">	    		request = store.put(data[i]);</div><div class="line">	    		request.onerror = function()&#123;</div><div class="line">	    			console.error(&apos;put添加数据库中已有该数据&apos;)</div><div class="line">	    		&#125;;</div><div class="line">	    		request.onsuccess = function()&#123;</div><div class="line">	    			console.log(&apos;put添加数据已存入数据库&apos;)</div><div class="line">	    		&#125;;</div><div class="line">	    	&#125;</div><div class="line">		&#125;,</div><div class="line">		getDataByKey:function(db,storename,key)&#123;</div><div class="line">			//根据存储空间的键找到对应数据</div><div class="line">			var store = db.transaction(storename,&apos;readwrite&apos;).objectStore(storename);</div><div class="line">			var request = store.get(key);</div><div class="line">			request.onerror = function()&#123;</div><div class="line">				console.error(&apos;getDataByKey error&apos;);</div><div class="line">			&#125;;</div><div class="line">			request.onsuccess = function(e)&#123;</div><div class="line">				var result = e.target.result;</div><div class="line">				console.log(&apos;查找数据成功&apos;)</div><div class="line">				console.log(result);</div><div class="line">			&#125;;</div><div class="line">		&#125;,</div><div class="line">		deleteData:function(db,storename,key)&#123;</div><div class="line">			//删除某一条记录</div><div class="line">			var store = store = db.transaction(storename,&apos;readwrite&apos;).objectStore(storename);</div><div class="line">			store.delete(key)</div><div class="line">			console.log(&apos;已删除存储空间&apos;+storename+&apos;中&apos;+key+&apos;记录&apos;);</div><div class="line">		&#125;,</div><div class="line">		clearData:function(db,storename)&#123;</div><div class="line">			//删除存储空间全部记录</div><div class="line">			var store = db.transaction(storename,&apos;readwrite&apos;).objectStore(storename);</div><div class="line">			store.clear();</div><div class="line">			console.log(&apos;已删除存储空间&apos;+storename+&apos;全部记录&apos;);</div><div class="line">		&#125;</div><div class="line">	&#125;</div><div class="line">	var students=[&#123; </div><div class="line">        id:1001, </div><div class="line">        name:&quot;Byron&quot;, </div><div class="line">        age:24 </div><div class="line">    &#125;,&#123; </div><div class="line">        id:1002, </div><div class="line">        name:&quot;Frank&quot;, </div><div class="line">        age:30 </div><div class="line">    &#125;,&#123; </div><div class="line">        id:1003, </div><div class="line">        name:&quot;Aaron&quot;, </div><div class="line">        age:26 </div><div class="line">    &#125;];</div><div class="line"></div><div class="line">	INDEXDB.openDB(myDB.name,myDB.version);</div><div class="line">    setTimeout(function()&#123;</div><div class="line">    	// console.log(&apos;****************添加数据****************************&apos;);</div><div class="line">    	// INDEXDB.addData(myDB.db,myDB.ojstore.name,students);</div><div class="line">    	// console.log(&apos;******************add重复添加**************************&apos;);</div><div class="line">    	// INDEXDB.addData(myDB.db,myDB.ojstore.name,students);</div><div class="line">    	// console.log(&apos;*******************put重复添加*************************&apos;);</div><div class="line">    	// INDEXDB.putData(myDB.db,myDB.ojstore.name,students);</div><div class="line">    	// console.log(&apos;*******************获取数据1001*************************&apos;);</div><div class="line">    	// INDEXDB.getDataByKey(myDB.db,myDB.ojstore.name,1001);</div><div class="line">    	// console.log(&apos;******************删除数据1001************&apos;);</div><div class="line">    	// INDEXDB.deleteData(myDB.db,myDB.ojstore.name,1001);</div><div class="line">    	// console.log(&apos;******************删除全部数据************&apos;);</div><div class="line">    	// INDEXDB.clearData(myDB.db,myDB.ojstore.name);</div><div class="line">    	// console.log(&apos;******************关闭数据库************&apos;);</div><div class="line">    	// INDEXDB.closeDB(myDB.db);</div><div class="line">    	// console.log(&apos;******************删除数据库************&apos;);</div><div class="line">    	// INDEXDB.deletedb(myDB.db);</div><div class="line">    &#125;,800)</div></pre></td></tr></table></figure></p>
+<p>下篇:<a href="http://fe.sina.cn/2016/09/23/html5ben-di-cun-chu-indexeddbji-chu-jie-shao-er-you-biao-he-suo-yin/" target="_blank" rel="external">HTML5本地存储IndexedDB基础介绍（二）- 游标和索引</a></p>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2017/07/25/0721/" rel="next" title="HTML5本地存储IndexedDB基础介绍（二）- 游标和索引">
+                <i class="fa fa-chevron-left"></i> HTML5本地存储IndexedDB基础介绍（二）- 游标和索引
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2017/07/25/0719/" rel="prev" title="利用socket.io+nodejs打造简单聊天室">
+                利用socket.io+nodejs打造简单聊天室 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+
+      <section class="site-overview sidebar-panel sidebar-panel-active">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/images/avatar.gif"
+               alt="John Doe" />
+          <p class="site-author-name" itemprop="name">John Doe</p>
+           
+              <p class="site-description motion-element" itemprop="description"></p>
+          
+        </div>
+        <nav class="site-state motion-element">
+
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives/">
+                <span class="site-state-item-count">15</span>
+                <span class="site-state-item-name">Artikel</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-categories">
+              
+                <span class="site-state-item-count">1</span>
+                <span class="site-state-item-name">Kategorien</span>
+              
+            </div>
+          
+
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+        </div>
+
+        
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2017</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">John Doe</span>
+</div>
+
+
+<div class="powered-by">
+  Erstellt mit  <a class="theme-link" href="https://hexo.io">Hexo</a>
+</div>
+
+<div class="theme-info">
+  Theme -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Muse
+  </a>
+</div>
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.1"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.1"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.1"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.1"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.1"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

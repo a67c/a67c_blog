@@ -1,0 +1,760 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next muse use-motion" lang="">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.1" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="Hexo, NexT" />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.1" />
+
+
+
+
+
+
+<meta name="description" content="####参考文档：https://www.w3.org/TR/2011/WD-resource-timing-20110811/ https://github.com/w3c/resource-timing 使用性能API快速分析web前端性能 译：严重混乱的 Resource Timing 译：Resource Timing (资源计时) 使用技巧 Chrome Developer Tools：">
+<meta property="og:type" content="article">
+<meta property="og:title" content="使用Resource Timing API分析前端性能探索（一）">
+<meta property="og:url" content="http://yoursite.com/2017/07/25/0723/index.html">
+<meta property="og:site_name" content="Hexo">
+<meta property="og:description" content="####参考文档：https://www.w3.org/TR/2011/WD-resource-timing-20110811/ https://github.com/w3c/resource-timing 使用性能API快速分析web前端性能 译：严重混乱的 Resource Timing 译：Resource Timing (资源计时) 使用技巧 Chrome Developer Tools：">
+<meta property="og:image" content="http://n.sinaimg.cn/mobileh5/01345b8f/20161104/performance.png">
+<meta property="og:image" content="http://n.sinaimg.cn/mobileh5/01345b8f/20161104/resource-timing-overview.png">
+<meta property="og:image" content="http://n.sinaimg.cn/mobileh5/01345b8f/20161104/addjs.png">
+<meta property="og:image" content="http://n.sinaimg.cn/mobileh5/01345b8f/20161104/juhuas.png">
+<meta property="og:image" content="http://n.sinaimg.cn/mobileh5/01345b8f/20161104/04173219.png">
+<meta property="og:updated_time" content="2017-07-25T14:49:49.668Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="使用Resource Timing API分析前端性能探索（一）">
+<meta name="twitter:description" content="####参考文档：https://www.w3.org/TR/2011/WD-resource-timing-20110811/ https://github.com/w3c/resource-timing 使用性能API快速分析web前端性能 译：严重混乱的 Resource Timing 译：Resource Timing (资源计时) 使用技巧 Chrome Developer Tools：">
+<meta name="twitter:image" content="http://n.sinaimg.cn/mobileh5/01345b8f/20161104/performance.png">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Muse',
+    sidebar: {"position":"left","display":"post","offset":12,"offset_float":0,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: 'Author'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2017/07/25/0723/"/>
+
+
+
+
+
+  <title>使用Resource Timing API分析前端性能探索（一） | Hexo</title>
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Hexo</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            Startseite
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            Kategorien
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            Über
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            Archiv
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            Tags
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/07/25/0723/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="John Doe">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Hexo">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">使用Resource Timing API分析前端性能探索（一）</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Veröffentlicht am</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2017-07-25T22:22:06+08:00">
+                2017-07-25
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">in</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/programming/" itemprop="url" rel="index">
+                    <span itemprop="name">编程</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>####参考文档：<br><a href="https://www.w3.org/TR/2011/WD-resource-timing-20110811/" target="_blank" rel="external">https://www.w3.org/TR/2011/WD-resource-timing-20110811/</a></p>
+<p><a href="https://github.com/w3c/resource-timing" target="_blank" rel="external">https://github.com/w3c/resource-timing</a></p>
+<p><a href="https://segmentfault.com/a/1190000004010453" target="_blank" rel="external">使用性能API快速分析web前端性能</a></p>
+<p><a href="http://ju.outofmemory.cn/entry/171909" target="_blank" rel="external">译：严重混乱的 Resource Timing</a></p>
+<p><a href="http://ju.outofmemory.cn/entry/110290" target="_blank" rel="external">译：Resource Timing (资源计时) 使用技巧</a></p>
+<p><a href="http://www.cnblogs.com/starof/p/5481935.html" target="_blank" rel="external">Chrome Developer Tools：Network Panel说明</a></p>
+<p>####基本说明：<br><code>Resource Timing</code>可以获取到单个静态资源从开始发出请求到获取响应之间各个阶段的Timing。主要用法如下:<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">window.performance.getEntriesByType(&quot;resource&quot;)</div></pre></td></tr></table></figure></p>
+<p>在控制台中显示如下：<br><img src="http://n.sinaimg.cn/mobileh5/01345b8f/20161104/performance.png" alt=""><br>主要API所取时间如下图所示：<br><img src="http://n.sinaimg.cn/mobileh5/01345b8f/20161104/resource-timing-overview.png" alt="">;</p>
+<p>######API主要分为两类：<br><strong>（一）：同域或者跨域都可以使用的属性：</strong></p>
+<ul>
+<li>name – URL 地址</li>
+<li>entryType – 通常是 “resource”</li>
+<li>startTime – 开始处理这个资源的时间（相对开始导航到页面时的毫秒数）</li>
+<li>duration – 处理这个资源的总耗时（毫秒）</li>
+</ul>
+<p><strong>（二）：只有同域资源可以访问到的属性（跨域也可以访问，但是拿不到数据）</strong></p>
+<ul>
+<li>redirectStart</li>
+<li>redirectEnd</li>
+<li>fetchStart</li>
+<li>domainLookupStart</li>
+<li>domainLookupEnd</li>
+<li>connectStart</li>
+<li>connectEnd</li>
+<li>secureConnectionStart</li>
+<li>requestStart</li>
+<li>responseStart</li>
+<li>responseEnd</li>
+</ul>
+<p>通过图示及API我们可以得出：</p>
+<p><strong>DNS查询时间：</strong><code>dns = domainLookupEnd - domainLookupStart</code>;</p>
+<p><strong>TCP链接时间：</strong><code>tcp = connectEnd - connectStart</code>;</p>
+<p><strong>waiting时间：</strong><code>wait = responseStart - requestStart</code></p>
+<p><strong>响应时间：</strong> <code>content = responseEnd - responseStart</code></p>
+<p><strong>总耗时:</strong> <code>duration</code></p>
+<p>在google 的network中我们可以拿到addjsv3.js的时间消耗，如下图所示：<br><img src="http://n.sinaimg.cn/mobileh5/01345b8f/20161104/addjs.png" alt="">;</p>
+<p>最后的27.13ms就是我们拿到的<code>duration</code>属性的值。</p>
+<p><strong>该面板属性具体解释为：</strong></p>
+<ul>
+<li><p>Queueing:可能是在本地防火墙的等待时间，或者是某些插件拦截时间。</p>
+</li>
+<li><p>Stalled：网络延时。指浏览器得到要发出这个请求的指令，到请求可以发出的等待时间。一般是代理协商、以及等待可复用的TCP连接释放的时间，不包括DNS查询、建立TCP连接时间等。</p>
+</li>
+<li><p>Proxy Negotiation:与代理服务器的连接时间。</p>
+</li>
+<li><p>DNS LookUp：表示DNS查询时间，如果第一次访问的是域名就需要查找，IP地址的话不需要，上图中没有这个参数，说明本地缓存了域名服务器的IP，浏览器不需要查询，直接通过IP请求服务器。</p>
+</li>
+<li><p>Initail Connection：建立连接的时间，包括 TCP handshakes/retries和negotiating a SSL.</p>
+</li>
+<li><p>Request sent:发送HTTP请求到服务器的时间，即上传时间，这个时间取决于发送请求的数据量的大小。</p>
+</li>
+<li><p>Waiting(TTFB)：发送请求后收到响应的第一个字节所花费的时间，TTFB(time to first bytes)；这是服务器优化的重要指标，服务器优化的目的就是减少这个时间。</p>
+</li>
+<li><p>Content Download：从服务器获取响应数据的时间，下载时间，即上面的Time减去Latency的时间，这是反应带宽的重要指标。受响应消息内容大小，网络带宽，是否使用http压缩等影响。<br>以上解释来源于<a href="http://www.cnblogs.com/starof/p/5481935.html" target="_blank" rel="external">Chrome Developer Tools：Network Panel说明</a><br>####问题说明：</p>
+</li>
+<li><p>1、跨域问题：<br>如果资源与网页不同域，则拿到的很多属性值都为0，查看了一下新浪、腾讯、网易新闻的首页，基本都是跨域访问资源，只能拿到最终的结果<code>duration</code>，而无法拿到具体数据，目前解决的方式是给跨域资源添加 <code>Access-Control-Allow-Origin:*</code> 响应头,如聚划算的页面，该页面可以拿到各资源具体数据：<br><img src="http://n.sinaimg.cn/mobileh5/01345b8f/20161104/juhuas.png" alt=""></p>
+</li>
+<li><p>2、<code>duration</code>问题<br>由于同源问题的限制，网页中大部分资源都是跨域的，所以<code>duration</code>基本成为度量时间的唯一指标，但是<code>duration</code>包含了 阻塞时间（blocking time）—— 浏览器 意识到需要下载一个资源，到这个资源实际被下载直接的时间延迟。阻塞会在几种情况时发生，最典型的资源数量比 TCP 连接数要多的情况。所以 duration 时间 比实际的下载时间要长很多，在翻译的原文中强调<a href="http://www.stevesouders.com/blog/2014/11/25/serious-confusion-with-resource-timing/" target="_blank" rel="external">http://www.stevesouders.com/blog/2014/11/25/serious-confusion-with-resource-timing/</a>我们衡量性能的时间准确来说应该是<code>dns+tcp+wait+content</code>,在github上也建议添加有别于<code>duration</code>的<code>networkDuration</code>属性，但是目前还没有被更好的支持说明，如果可以把静态服务器上的所有资源添加响应头，拿到的数据就可以更精确，但是据说咱们有几百台服务器，仍然是一个特别大的工作量。</p>
+</li>
+<li><p>3、返回<code>0</code>的含义<br>跨域导致的受限访问的 Resource Timing 属性会被设置为 0，如果资源是从缓存中读取的，属性同样会为0，对此，该文章有更详细的介绍<a href="http://ju.outofmemory.cn/entry/110290" target="_blank" rel="external">译：Resource Timing (资源计时) 使用技巧</a></p>
+</li>
+<li><p>4、兼容性<br><img src="http://n.sinaimg.cn/mobileh5/01345b8f/20161104/04173219.png" alt=""><br>在手机上测试，兼容性也比较差：</p>
+</li>
+<li><p><strong>IOS都不支持该属性</strong></p>
+</li>
+<li><strong>Android UC浏览器目前不支持该属性</strong></li>
+</ul>
+<p>虽然支持度不太好，但是我们仍然可以收到到部分数据，也可以做个简单的汇总，尤其是在收集到的数据中看到了有的收集UA是windows phone的，期待它被更好的支持。</p>
+<p>####写在后面<br>以上为通过查阅文档、博客后的初步总结，若有错误还请多多指正。</p>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2017/07/25/0719/" rel="next" title="利用socket.io+nodejs打造简单聊天室">
+                <i class="fa fa-chevron-left"></i> 利用socket.io+nodejs打造简单聊天室
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2017/07/25/0717/" rel="prev" title="5种样式实现div容器中三图摆放实例对比说明">
+                5种样式实现div容器中三图摆放实例对比说明 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+
+      <section class="site-overview sidebar-panel sidebar-panel-active">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/images/avatar.gif"
+               alt="John Doe" />
+          <p class="site-author-name" itemprop="name">John Doe</p>
+           
+              <p class="site-description motion-element" itemprop="description"></p>
+          
+        </div>
+        <nav class="site-state motion-element">
+
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives/">
+                <span class="site-state-item-count">15</span>
+                <span class="site-state-item-name">Artikel</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-categories">
+              
+                <span class="site-state-item-count">1</span>
+                <span class="site-state-item-name">Kategorien</span>
+              
+            </div>
+          
+
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+        </div>
+
+        
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2017</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">John Doe</span>
+</div>
+
+
+<div class="powered-by">
+  Erstellt mit  <a class="theme-link" href="https://hexo.io">Hexo</a>
+</div>
+
+<div class="theme-info">
+  Theme -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Muse
+  </a>
+</div>
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.1"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.1"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.1"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.1"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.1"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
