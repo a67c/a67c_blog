@@ -1,2 +1,2 @@
 # a67c.github.io
-a67c blog
+a67c blog 1
