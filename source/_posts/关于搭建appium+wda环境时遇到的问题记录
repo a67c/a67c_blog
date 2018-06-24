@@ -1,0 +1,90 @@
+---
+layout: 关于搭建appium+wda环境时遇到的问题记录
+title: 关于搭建appium+wda环境时遇到的问题记录
+date: 2018.04.16 19:19
+tags:
+    - Appium环境搭建
+---
+#### xcodebuild报错：
+**各种路径请对应自己电脑上的路径**
+```
+stderr: xcode-select: error: tool 'xcodebuild' requires Xcode, but active developer directory '/Library/Developer/CommandLineTools' is a command line tools instance
+```
+解决：
+```
+sudo xcode-select --switch /Applications/Xcode6-Beta.app/Contents/Developer/
+```
+-----
+#### java环境配置
+```
+export JAVA_HOME=/Library/Java/JavaVirtualMachines/jdk1.8.0_161.jdk/Contents/Home   
+
+export PATH=$JAVA_HOME/bin:$PATH 
+
+export CLASSPATH=.:$JAVA_HOME/lib/dt.jar:$JAVA_HOME/lib/tools.jar
+```
+------
+#### Homebrew报错
+```
+ [Homebrew: Could not symlink, /usr/local/bin is not writable]
+
+```
+解决：
+```
+sudo chown -R `whoami`:admin /usr/local/bin
+```
+-------
+#### xcode报错：
+```
+xcode-select: error: tool 'xcodebuild' requires Xcode, but active developer directory '/Library/Developer/CommandLineTools' is a command line tools instance  
+```
+
+解决：在命令行工具中输入下面的命令：
+
+```
+sudo xcode-select -s  /Applications/Xcode.app/Contents/Developer
+```
+
+#### icu4c问题：
+```
+dyld: Library not loaded: /usr/local/opt/icu4c/lib/libicui18n.61.dylib
+  Referenced from: /usr/local/bin/node
+  Reason: image not found
+Abort trap: 6
+```
+解决：
+```
+brew install icu4c
+brew link icu4c --force
+```
+
+#### wda报错
+```
+This application’s application-identifier entitlement does not match that of the installed application. These values must match for an upgrade to be allowed.
+```
+在不同mac上测试时用的都是同一台手机，上个mac上装的wda可能不适合下一台，所以卸载了wda后  新环境可以正常安装wda
+
+#### openssl broken
+```
+Error: /usr/local/opt/openssl not present or broken
+Please reinstall openssl. Sorry :(
+
+```
+brew install openssl
+安装之后准备 `brew link openssl`时报错，报错如下：
+```
+Warning: Refusing to link: openssl
+Linking keg-only openssl means you may end up linking against the insecure,
+deprecated system OpenSSL while using the headers from Homebrew's openssl.
+Instead, pass the full include/library paths to your compiler e.g.:
+  -I/usr/local/opt/openssl/include -L/usr/local/opt/openssl/lib
+```
+brew link openssl --force仍然报错
+最终输入：
+```
+ln -s /usr/local/opt/openssl/lib/libcrypto.1.0.0.dylib /usr/local/lib/
+
+ln -s /usr/local/opt/openssl/lib/libssl.1.0.0.dylib /usr/local/lib/
+
+```
+openssl问题解决来源于[该blog](https://blog.csdn.net/jiamian_/article/details/55098125)

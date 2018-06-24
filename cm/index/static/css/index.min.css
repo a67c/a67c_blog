@@ -1,4 +1,0 @@
-/*!
- * @version 0.1.0
- * @date 2017-11-22
- */body{background-color:#999;margin:0}video{display:block;margin:0 auto;width:100%}#shotBar{position:absolute;top:290px;min-height:200px;width:98%;background-color:#000;-webkit-box-shadow:-5px -5px 10px #fff;box-shadow:-5px -5px 10px #fff;border-radius:5px;padding:2px;overflow:auto}#shotBar img{border:3px solid #fff;border-radius:5px;height:110px;width:210px;margin-left:4px}

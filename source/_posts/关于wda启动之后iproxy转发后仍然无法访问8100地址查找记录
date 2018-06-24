@@ -1,0 +1,38 @@
+---
+layout: 关于wda启动之后iproxy转发后仍然无法访问8100地址查找记录
+title: 关于wda启动之后iproxy转发后仍然无法访问8100地址查找记录
+date: 2018.04.16 19:49
+tags:
+    - Appium
+---
+#### 成功现象说明：
+一般来说在wda启动之后会生成地址http:xxx:8100,通过iproxy转发端口后，在浏览器中输出127.0.0.1:8100/status，即可返回json字符串，从而在浏览器中观察到wda返回的字符串。【假设iproxy端口转发为8100.】
+
+#### 问题说明：
+但是单独启动wda之后，面临着http:xxx:8100/status不能正常返回json字符串的情况。
+
+xcodebuild中启动wda日志输出最后一行为
+```
+ServerURLHere->http://172.24.39.75:0<-ServerURLHere
+```
+最后一行并没有输出8100！不同的版本表现的不同~
+在这种情况下通过iproxy转发8100端口 在浏览器中输出127.0.0.1:8100是找不到的。
+
+#### 解决方案：
+如何修改：
+通过命令行启动xcodebuild时加上`USE_PORT`参数来选定端口。*appium中更改wda端口也是通过这个参数来操作的*
+```
+/usr/bin/xcodebuild build-for-testing test-without-building -project /usr/local/lib/node_modules/appium/node_modules/appium-xcuitest-driver/WebDriverAgent/WebDriverAgent.xcodeproj -scheme WebDriverAgentRunner -destination id=请传入设备的udid USE_PORT=8100 test
+```
+
+
+#### 问题查找过程blog记录：
+ [Appium Destopv1.2.3 中 WDA 启动后监听 ip 和端口的疑问](https://testerhome.com/topics/10445)
+
+ [How can i change WebdriverAgent port with command-line parameters ?](https://github.com/facebook/WebDriverAgent/issues/538)
+
+ [Appium 1.7.1, WDA ServerURLHere->http://...:0<-ServerURLHere](https://github.com/appium/appium/issues/9547)
+
+ [WDA does not listen port 8100 ](https://github.com/facebook/WebDriverAgent/issues/661#issuecomment-338920833)
+
+ [关于端口转发iproxy](https://blog.yuhanle.com/2018/01/03/how-to-install-web-driver-agent-on-device/)

@@ -1,0 +1,42 @@
+---
+layout: 关于Appium在安卓上频繁安装unlock、setting.apk的问题查找记录
+title: 关于Appium在安卓上频繁安装unlock、setting.apk的问题查找记录
+date: 2018.01.18 14:14
+tags:
+    - Appium
+---
+
+
+#### 总结
+
+该问题已经被官方在1.7.x的版本中进行修复。以下为对于该问题的查找记录
+#### 1.6.x版本说明
+
+在appium1.6.x版本中 每次进行安卓用例测试时 appium都会安装unlock.app、setting.app、ime.app
+
+关于这个的解决方式可参考如下blog
+
+[appium解决每次运行都需要安装Unlock以及AppiumSetting的问题](http://blog.csdn.net/hszxd479946/article/details/78900982)
+
+或者在appium设计到该处问题的源码位置，将其添加判断以上app是否安装的逻辑即可
+
+#### 1.7.x版本说明
+当前npm版本为1.7.2版本，官方已经修复了这个问题，在1.7.2的[changeLog](https://github.com/appium/appium/blob/master/CHANGELOG.md)中说明如下：
+![image.png](http://upload-images.jianshu.io/upload_images/1094385-b33ef73da19de461.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240);
+
+由于这个问题设计到的代码在appium-android-driver这个封装好的组件中，所以具体看一下是什么时候更改的,是在17年10月份的这次代码提交中修复了该问题。
+
+从commit继续往下看，9月份这里也进行过改动，但是10月份改动之后与当前npm版本是一致的。
+[Fix handling of settings and unlock app pushing](https://github.com/appium/appium-android-driver/commit/033b70e75fcada83ff2e73e99d9c605c59b35621)
+![image.png](http://upload-images.jianshu.io/upload_images/1094385-8827acf34ec14ae1.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+
+对于installOrUpgrade这个函数，它的定义在封装好的android-adb类库里面，那么接下来去这里看一下对于这个函数的更改。
+
+[android-adb commit](https://github.com/appium/appium-adb/commit/404455cf43e1f0086fa30d1ff6675f216f2e5a73)
+
+这个函数同样进行了两次更改，在9月份的更改中采用了外部传参的方式判断是否安装但是在10月份的commit中又去掉了外部传参的参数，改为在该函数中判断是否安装
+
+![image.png](http://upload-images.jianshu.io/upload_images/1094385-c070ef3ec671314c.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+
+**对于这个的总结就是该问题已经被官方在1.7.x的版本中进行修复。**
+**2018年1月**

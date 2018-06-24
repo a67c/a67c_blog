@@ -1,0 +1,81 @@
+---
+layout: 我们仍未知道那天wda为什么没有被启动
+title: 我们仍未知道那天wda为什么没有被启动
+date: 2018-04-16 21:16:24
+tags:
+    - Appium
+---
+ 这是一篇废话连篇的佛系记录，本文主要为appium+wda测试app过程中遇到的问题
+
+#### 1.appium报错说明：
+
+```
+urllib2.URLError: <urlopen error [Errno 61] Connection refused>
+```
+该问题为什么会发生至今仍不知道，一方面说是当前appium服务端没有被启动，但是在appium服务端启动之后仍曾经遇到过这个问题，无组织无纪律2%的概率复现。
+
+**当前解决方式:通过增加重试次数重启appium**
+#### 2.socket hang up
+
+```
+Could not proxy command to remote server. Original error: Error: socket hang up
+```
+
+appium服务端挂起，该问题由于appium服务端什么原因导致尚未查明，每隔一段时间总会hang up一次。
+**假装解决方式：选择在python脚本中对其异常进行捕获**
+但是这个问题总是要查的……
+
+#### 3.找不到证书
+
+```
+Error: App with bundle identifier 'xxxxxx'
+```
+遇到这个问题一种是真的证书写错了，另一种，在程序执行了好久后报这个错误那就非常奇怪了……奇怪到至今也没有查到这个问题，但可以确定的是，随着mac连接设备不再频繁掉设备后，这个问题也逐渐减少了。
+
+
+#### 4.找不到设备
+
+```
+ Message: An unknown server-side error occurred while processing the command. Original error: Unknown device or simulator UDID: 'balabalabalalbas'
+```
+大意就是找不到设备，尤其是在程序执行一段时间后失败了，失败原因找不到设备，就好像之前执行的一个小时都在闹着玩一样。
+此时ituns会弹出各种弹框：eg'当前找不到该设备' ‘无法像该设备传输信息’
+所以简单粗暴的认为是设备掉线了，后来更换了HUB之后，该问题果然减少了！**更换HUB**之后连带着找不到证书的问题也**果然**减少了！
+
+#### httplib.BadStatusLine
+
+```
+raise BadStatusLine(line) httplib.BadStatusLine: ''
+```
+网上查说是你的python请求中断啊，但是为什么会中断！网络好好的，什么都好好的，后来终于确定了现场，那就是报出该问题时99%是app证书没有被信任，暂定就破案吧。
+
+#### 5.Too many instances
+
+```
+ Too many instances of this services are already running
+```
+如果你的appium日志经常阵亡在wda启动时，满屏都是wda报错的日志时，不妨从xcodebuild中启动一下wda，经常会出现这个错误！除了重启手机别无它法。
+
+#### 6.A session is either terminated or not started
+```
+WebDriverException: Message: A session is either terminated or not started
+```
+大概就是当前的session已经停止了，再去连接是连接不上的，捕获到这种异常后，进行了appium重新请求，即重新建立appium与wda，wda与手机的session
+
+#### 7.wda没有启动
+
+```
+WebDriverException: Message: An unknown server-side error occurred while processing the command. Original error: An error occurred
+```
+element找不到，当前发送的命令webdriver中没有，都可能导致这个问题
+
+
+#### 8.xcodebuild65
+这个问题范围太广了，wda没有启动成功时，基本是成片的'xcodebuild 65'
+且如果你上次执行失败导致xcodebuild65 and wda remove，之后的执行基本也是失败的。此时主要是通过xcodebuild重启wda来尽量避免成片出现这种错误。
+当前可以确定的是：
+手机弹出未安装sim卡，手机弹出alertView弹窗，手机未被信任都会阻止wda的启动。
+重启手机，通过xcodebuild重启wda可以有效减少此类问题发生，但是可能不能避免。
+
+#### 总结
+重启手机、重启wda、避免手机电量不足而导致重新信任电脑、增加appium启动重试次数、更换硬件设备、对于异常进行捕获而非抛出，大概就是以上要表达的全部意思。

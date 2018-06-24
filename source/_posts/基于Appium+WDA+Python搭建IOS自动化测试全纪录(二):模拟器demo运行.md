@@ -1,0 +1,97 @@
+---
+layout: 基于Appium+WDA+Python搭建IOS自动化测试全纪录(二):模拟器demo运行
+title: 基于Appium+WDA+Python搭建IOS自动化测试全纪录(二):模拟器demo运行
+date: 2018.01.10 22:24
+tags:
+	- Appium环境搭建
+---
+
+[基于Appium+WDA+Python搭建IOS自动化测试全纪录(一):环境搭建
+](2018/01/10/基于Appium+WDA+Python搭建IOS自动化测试全纪录(一):环境搭建/)
+
+由于在跑这个demo之前，完全没有接触过移动端，就是连模拟器都不会启动的那种，所以步骤会说的比较啰嗦详细。
+
+#### 如何跑测试DEMO
+
+选定测试用例,github提供了测试的explame
+
+[https://github.com/appium/sample-code](https://github.com/appium/sample-code)
+
+#### 代码选择
+
+需要选择一个ios的APP，一个python脚本，如图选择的是app里面的TestApp，脚本选择的是python里面的ios_sample.py
+![image.png](http://upload-images.jianshu.io/upload_images/1094385-72611e445351abec.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240);
+
+#### 模拟器运行
+
+因为是在模拟器上运行，所以要先把app放到模拟器上。一般来说通过在xcode中运行代码就可在模拟器中生产app，但是这个TestApp用例进去看了之后发现里面如图所示：
+![image.png](http://upload-images.jianshu.io/upload_images/1094385-9a55f95dc9c13a23.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+
+所以就只能开启模拟器，然后把右边红框框生产的app拖放到模拟器里。
+想用命令行操作请看这里：[iOS-通过命令行安装.app到模拟器https://www.jianshu.com/p/8edf0b4ffb1b](https://www.jianshu.com/p/8edf0b4ffb1b)
+
+#### 配置更改
+
+现在app已经拖到模拟器里了，接下来启动python脚本，在执行脚本之前，还有一些配置需要更改。
+如下图所示，
+![WX20180110-205552@2x.png](http://upload-images.jianshu.io/upload_images/1094385-09190b669d9db567.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+
+首先说uuid的问题，每一个模拟器都有对应的uuid，这里在执行模拟器时用的是uuid，但是到了真机上，就变成了udid。
+
+**所以要拿到当前模拟器的uuid：**
+
+终端输入命令可得到想要的模拟器的字符串。
+```
+instruments -s devices
+```
+![image.png](http://upload-images.jianshu.io/upload_images/1094385-b0756ac60e6e89f7.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+
+所以配置信息多添加一行
+```
+  'uuid':'xxxxxx'
+```
+
+更改后的配置如下：
+```
+          desired_capabilities={
+                'app': app,
+                'platformName': 'iOS',
+                'platformVersion': '11.2',//更改为当前模拟器的版本
+                'deviceName': 'iPhone 6s',//更改为当前模拟器的型号 
+                'uuid':'2EF911A2-CA9C-4D28-96EB-3DBC8DF39FA5'//更改为当前模拟器的uuid
+//经过测试发现在模拟器上uuid不是必须的，所以这里不填也可正常运行
+            })
+
+```
+#### 启动脚本
+先启动appium
+```
+appium
+```
+当控制台中显示如下，启动成功
+```
+[Appium] Welcome to Appium v1.7.2
+[Appium] Appium REST http interface listener started on 0.0.0.0:4723
+```
+
+
+
+在脚本所在目录下执行
+```
+python xxxx.py
+```
+（由于ios_sample.py的名字被用来测试别的了，所以给其改成了ios.py）
+![image.png](http://upload-images.jianshu.io/upload_images/1094385-9cbb164e39d74e91.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+
+如此，模拟器上测试demo运行成功！
+由于是在整个流程跑通之后回头做的纪录，所以可能有些地方纪录不完善，错误之处欢迎提出。
+
+------
+[Tbc]
+
+
+
+
+
+
+

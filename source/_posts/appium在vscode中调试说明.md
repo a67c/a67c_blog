@@ -1,0 +1,62 @@
+---
+layout: Appium在vscode中调试说明
+title: Appium在vscode中调试说明
+date: 2018.02.22
+tags:
+    - Appium环境搭建
+---
+#### 需求说明
+要对appium的源码进行调试，如果选择全局安装的难免会在调试过程中破坏原代码，因此从github上面拉下了master分支的代码进行调试   [github代码：](https://github.com/appium/appium.git)
+
+#### 环境说明：
+vscode 
+
+appium 1.7.2
+
+mac
+
+#### 安装appium
+
+要使拽下来的代码达到可运行状态，需要执行`npm install`但是这个安装过程中如果出现下载不成功的问题，原因可能是没有翻墙，导致无法下载chromedriver,因此建议翻箱后重新`npm install`
+
+#### 调试文件配置
+在vscode中打开appium所在的文件夹，要在debug时对vscode的launch.json进行配置,关于它的debug流程官网地址[https://code.visualstudio.com/docs/editor/debugging](https://code.visualstudio.com/docs/editor/debugging)介绍的比较详细，我用的launch.json配置如下：
+```launch.json
+{
+    // 使用 IntelliSense 了解相关属性。 
+    // 悬停以查看现有属性的描述。
+    // 欲了解更多信息，请访问: https://go.microsoft.com/fwlink/?linkid=830387
+    "version": "0.2.0",
+    "configurations": [
+
+        {
+            "type": "node",
+            "request": "launch",
+            "name": "Launch Program",
+            "program": "${workspaceFolder}/build/lib/main.js",//package.json中的默认入口
+            "console" : "integratedTerminal"  //控制台信息的显示
+        }
+    ]
+}
+```
+#### 运行
+
+调试文件运行好后，就可以在debug中运行按钮启动appium了，启动后就可以打断点进行调试了。
+
+#### 修改代码
+
+在appium调试过程中发现，文件夹中会有build和其它文件夹，而入口文件一般都在build文件夹下，可是build文件夹中的代码又是被转换过的，我们如果在非build文件下更改又不会生效，那么这个时候要怎么办呢？
+
+首先说原因，appium是用nodejs写成的，其中用了js的一些新特性，不能被直接识别执行，因此需要通过babel将代码转换一下，因此转换前的代码在lib中，转换后的代码在build中，appium及其所有的类库都是这样的方式，转换时用的打包工具是gulp。
+
+由于执行的是build中的文件，而我们改代码都在转换前的文件夹lib下，所以需要对修改的代码进行打包。
+进入gulpfiles.js所在的文件夹下，执行
+```
+npm run build
+```
+就可以将代码修改了。
+
+有时候调试代码时需要涉及到在node_modules
+中的`appium-base-driver`,`appium-xcuitest-driver`,`appium-android-driver`等各种类库中修改，这就需要我们在每一个类库中修改后都要进行打包,目前还没有找到gulp在node中的中间件，就是全部都打包的那种，之前只用过webpack的中间件，如果有小伙伴知道怎么在执行node时用gulp全部打包一下，还请告知哈。
+
+
