@@ -4,7 +4,7 @@
 
 # Site
 title: 进击的程序茗 Blog
-subtitle: 'welcome'
+subtitle: 'welcome to cming.site'
 author: 进击的程序茗
 language: zh
 timezone:
@@ -68,9 +68,9 @@ comment:
 
 # The following content is not recommended to modify
 # 搜索数据文件路径设置，不建议改动：
-search:
-  path: search.json
-  field: post
+# search:
+#   path: search.json
+#   field: post
 
 # 文章样式(是否首行缩进)：
 post_style:
