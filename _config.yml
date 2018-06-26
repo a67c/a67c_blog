@@ -4,7 +4,7 @@
 
 # Site
 title: 进击的程序茗 Blog
-subtitle: 
+subtitle: 'welcome'
 author: 进击的程序茗
 language: zh
 timezone:
@@ -21,7 +21,7 @@ permalink_defaults:
 # Site settings
 # 网站综合内容设置：
 SEOTitle: 进击的程序茗
-header-img: img/home-bg.jpg
+header-img: img/bing.jpeg
 email: 670295887@qq.com
 description: "进击的程序茗"
 keyword: ""
@@ -55,12 +55,12 @@ sidebar-avatar: img/bing.jpeg      # use absolute URL, seeing it's used in both 
 #     }
 # ]
 
-# comment:
-#   type: gitment
-#   id: your-id-created-by-https://github.com/settings/applications/new
-#   secret: your-secret-created-by-https://github.com/settings/applications/new
-#   owner: aircloud
-#   repo: hexo-aircloud-blog
+comment:
+  type: gitment
+  id: 5f30ddfa7cc1a3ed7e3a
+  secret: a2fb0816fa4ac0af72397c0e6222df36d2c053d6
+  owner: a67c
+  repo: a67c_cmt
 
 # donate:
 #   img: img/donate.jpg
